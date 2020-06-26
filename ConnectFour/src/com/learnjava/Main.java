@@ -20,6 +20,7 @@ public class Main {
         return oneDArray;
     }
 
+
     // boolean PlayerWinsTheGame : returns true when someone has won the game, returns false when no one has won the game yet
     // @param String[][] cells : boardGame cells, which will be used to check if any Connect Four is completed
     // @param int[] cellCoordinate : takes in a coordinate of a cell that is last filled; this will be used as a origin point to check for any completed path
@@ -31,6 +32,7 @@ public class Main {
         int numCol = cells[0].length;
 
         int midColNum = numCol/2;
+        int midRowNum = numRow/2;
 
         // Checks columns
         // First checks at least four cells of that column is filled because otherwise there is no way to complete a path
@@ -51,8 +53,28 @@ public class Main {
 
 
         // Checks diagonals
+        // Checks top-left-to-bottom-right diagonal line
+        for (int h = 0; h <= midColNum; h++){ // h stands for horizontal shift
+            for (int v = 0; v < midRowNum; v++) { // v stands for vertical shift
+                // Checks diagonal lines from top-left of the gameBoard to bottom-right of the gameBoard
+                if (cells[v][h].equals(cells[v + 1][h + 1]) && cells[v][h].equals(cells[v + 2][h + 2]) && cells[v][h].equals(cells[v + 3][h + 3]) && !cells[v][h].equals(" ")) {
+                    return true;
+                }
+            }
+        }
+
+        // Checks top-right-to-bottom-left diagonal line
+        for (int h = numCol - 1; h >= midColNum; h--) { // h stands for horizontal shift
+            for (int v = 0; v < midRowNum; v++) { // v stands for vertical shift
+                // Checks diagonal lines from top-right of the gameBoard to the bottom-left of the gameBoard
+                if (cells[v][h].equals(cells[v + 1][h - 1]) && cells[v][h].equals(cells[v + 2][h - 2]) && cells[v][h].equals(cells[v + 3][h - 3]) && !cells[v][h].equals(" ")) {
+                    return true;
+                }
+            }
+        }
 
 
+        // Returns false by default
         return false;
     }
 
@@ -170,6 +192,11 @@ public class Main {
             if (PlayerWinsTheGame(cells, lastCellCoordinate)) {
                 System.out.println(gameBoard);
                 System.out.println("Congratulations! Player " + cellFiller + " Wins!");
+                System.out.println("Total number of turns: " + numOfTurns);
+                break;
+            } else if (numOfTurns == (cells[0].length * cells.length)) { // when all cells are filled up without anyone completing Connect Four, game is tied
+                System.out.println(gameBoard);
+                System.out.println("=== The Game Tied! ===");
                 break;
             }
 
